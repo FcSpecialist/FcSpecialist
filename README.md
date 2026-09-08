@@ -1,24 +1,29 @@
-# FCspecialist live platform
+# FCspecialist
 
-Full-stack Node/Express site using the FCspecialist visual master, customer accounts, booking slots and Stripe Checkout.
+FCspecialist is a Node/Express + SQLite coaching platform with Stripe Checkout, customer accounts, gameplay-review submission and coaching bookings.
 
-## Current services
-- Gameplay Review — £15 one-off
-- 1:1 Live Coaching — £25 one-off
-- Monthly Coaching — £149/month recurring
+## Services
+- Gameplay Review — £15
+- 1:1 Live Coaching — £25
+- Monthly Coaching — £149/month (up to 8 sessions)
+- FUT Champions coaching packages: Rank 1 £55, Rank 2 £50, Rank 3 £40, Rank 4 £30, Rank 5 £25
 
-## Local test
-1. Install Node.js 20+.
-2. Run `npm install`.
-3. Copy `.env.example` to `.env`.
-4. Set a strong `JWT_SECRET`.
-5. Leave Stripe variables blank to test account/booking flow in demo mode.
-6. Run `npm start` and open http://localhost:3000.
+## Important
+This site does not collect EA or PSN passwords and does not provide account-boosting/account-sharing services. Customers keep control of their own account.
 
-## Stripe
-Set `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` in the hosting provider's environment variables. The app uses Stripe-hosted Checkout. Monthly Coaching uses a recurring monthly Checkout price. Configure a webhook for `/api/stripe/webhook` and listen for `checkout.session.completed`, `invoice.paid`, and `customer.subscription.deleted`.
+## Render environment variables
+- `BASE_URL`
+- `JWT_SECRET`
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+- optional `STRIPE_CURRENCY=gbp`
 
-## Deployment
-Recommended quick path: Render Web Service. Build command: `npm install`. Start command: `npm start`.
+## Stripe webhook
+Endpoint: `/api/stripe/webhook`
+Events: `checkout.session.completed`, `invoice.paid`, `customer.subscription.deleted`
 
-For production customer/order persistence, use a persistent disk for the SQLite database or migrate the database to managed Postgres before scaling. Do not put Stripe secret keys in the website source code.
+## Before launch
+1. Test every service in Stripe Sandbox.
+2. Remove/ignore old test orders before opening to customers.
+3. Switch Stripe to Live keys only after final testing.
+4. Use persistent production storage (SQLite on an ephemeral filesystem is not suitable for long-term customer data).
